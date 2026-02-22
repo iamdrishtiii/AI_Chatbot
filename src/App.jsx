@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Navbar from "./components/Navbar";
 import ChatMessage from "./components/ChatMessage";
 import {
@@ -14,6 +14,13 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
+
+  const bottomRef = useRef(null);
+
+  //  Auto scroll when messages change
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isLoading]);
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -82,6 +89,7 @@ const App = () => {
             })
           )}
           {isLoading && <LoadingIndicator darkMode={darkMode} />}
+           <div ref={bottomRef}></div>
         </div>
       </div>
       <ChatInput
